@@ -15,7 +15,7 @@ class User(AbstractUser):
         verbose_name = 'User'
         verbose_name_plural = 'Users'
 
-class Roles(models.Model):
+class Role(models.Model):
     name = models.CharField(max_length=255, unique=True)
 
 
