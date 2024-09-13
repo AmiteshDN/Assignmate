@@ -8,7 +8,7 @@ class User(AbstractUser):
     profile_image = models.URLField(blank=True, null=True)
     oauth_provider = models.CharField(max_length=50, blank=True, null=True)
     oauth_uid = models.CharField(max_length=255, blank=True, null=True, unique=True)
-    role = models.ForeignKey('Roles', on_delete=models.SET_NULL, null=True, blank=True)
+    # role = models.ForeignKey('Roles', on_delete=models.SET_NULL, null=True, blank=True)
 
     class Meta:
         db_table = 'user' 
