@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 # Create your models here.
+# Defining a custom user
 class User(AbstractUser):
     # Abstract user already has basic fields
     # like email, username, first_name etc.,
@@ -15,6 +16,8 @@ class User(AbstractUser):
         verbose_name = 'User'
         verbose_name_plural = 'Users'
 
+# Defining role model - [Student, Tutor, Admin]
+# Admin role might get added in future
 class Role(models.Model):
     name = models.CharField(max_length=255, unique=True)
 
