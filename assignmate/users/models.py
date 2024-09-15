@@ -30,6 +30,21 @@ class Role(models.Model):
         return f"{self.name}"
     
 
+# model for tagging role to the user
+class UserRole(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="roles")
+    role = models.ForeignKey(Role, on_delete=models.CASCADE, related_name="users")
+
+    
+    class Meta:
+        unique_together = ('user', 'role')
+    
+
+    def __str__(self):
+        return f"{self.user} - {self.role.name}"
+
+
+
 # Profile model
 class Profile(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -47,7 +62,8 @@ class Permissions(models.Model):
                           unique=True,
                           blank=False,
                           help_text="Enter an id starting with PERM and 3 digit number eg:PERM101",
-                          null=False)
+                          null=False,
+                          )
     name = models.CharField(unique=True, blank=False, null=False)
 
     class Meta:
