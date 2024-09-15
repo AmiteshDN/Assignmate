@@ -23,5 +23,16 @@ class Role(models.Model):
 
     def __str__(self):
         return f"{self.name}"
+    
+
+# Profile model
+class Profile(models.Model):
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    bio = models.TextField(help_text="Enter bio")
+    dob = models.DateField()
+    # profile_picture = models.URLField()
+    
+    def __str__(self):
+        return f"{self.user_id}"
 
 
