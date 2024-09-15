@@ -19,6 +19,11 @@ class User(AbstractUser):
 # Defining role model - [Student, Tutor, Admin]
 # Admin role might get added in future
 class Role(models.Model):
+    id = models.CharField(max_length=10, 
+                          primary_key=True, 
+                          unique=True, 
+                          blank=False,
+                          help_text="Start with ROL and add a number. eg: ROL101")
     name = models.CharField(max_length=255, unique=True)
 
     def __str__(self):
@@ -36,3 +41,19 @@ class Profile(models.Model):
         return f"{self.user_id}"
 
 
+# Permission model
+class Permissions(models.Model):
+    id = models.CharField(primary_key=True,
+                          unique=True,
+                          blank=False,
+                          help_text="Enter an id starting with PERM and 3 digit number eg:PERM101",
+                          null=False)
+    name = models.CharField(unique=True, blank=False, null=False)
+
+    class Meta:
+        db_table = 'permissions' 
+        verbose_name = 'Permission'
+        verbose_name_plural = 'Permissions'
+
+    def __str__(self):
+        return f"{self.id}"
