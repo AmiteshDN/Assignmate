@@ -1,3 +1,5 @@
+from decouple import config
+
 """
 Django settings for assignmate project.
 
