@@ -18,13 +18,14 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from app.views import home
+from app import views
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')), #allauth urls for authentication and OAUth
     path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),  # OAuth2 URLs
-    path('', home)
+    path('', views.home, name='home'),  # Home view
 ]
 
 if settings.DEBUG:

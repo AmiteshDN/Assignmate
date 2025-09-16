@@ -12,7 +12,7 @@ class User(AbstractUser):
     # role = models.ForeignKey('Roles', on_delete=models.SET_NULL, null=True, blank=True)
 
     class Meta:
-        db_table = 'user' 
+        db_table = 'user'
         verbose_name = 'User'
         verbose_name_plural = 'Users'
 
