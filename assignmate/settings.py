@@ -1,4 +1,7 @@
 from decouple import config
+from dotenv import load_dotenv, find_dotenv
+
+
 
 """
 Django settings for assignmate project.
@@ -18,12 +21,14 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# TEMPLATE_DIR=os.path.join(BASE_DIR, 'app/templates')
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -42,28 +47,19 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'users',
-    'app',
-
-    'django.contrib.sites',
-    # all-auth
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',    #Provider of OAuth
-    'allauth.socialaccount.providers.github',    #Provider of OAuth
-
-    'oauth2_provider',  # Django OAuth Toolkit for OAuth2 support
-
+    'app.apps.AssignmateConfig',
 ]
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+        'users.authentication.Auth0Authentication',
         'rest_framework.authentication.SessionAuthentication',  # Optional for debugging
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
+    'DEFAULT PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10,
 }
 
 MIDDLEWARE = [
@@ -74,9 +70,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
-    #Oauth
-    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'assignmate.urls'
@@ -92,9 +85,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-
-                #  allauth
-                'django.template.context_processors.request',
             ],
         },
     },
@@ -118,14 +108,8 @@ DATABASES = {
 }
 
 
-# site id
-SITE_ID = 1
-
-
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',
-    'oauth2_provider.backends.OAuth2Backend',  # OAuth2 backend for token authentication
 ]
 
 
@@ -149,40 +133,31 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTH_USER_MODEL = 'users.User'
 
-# Social providers
-SOCIALACCOUNT_PROVIDERS = {
-    'google' : {
-        'SCOPE': ['profile', 'email'],
-        'AUTH_PARAMS': {'access_type': 'online'},
-        'CLIENT_ID': config('GOOGLE_CLIENT_ID', default=''),
-        'SECRET': config('GOOGLE_CLIENT_SECRET', default=''),
-    },
-    # 'github': {
-    #     'APP': {
-    #         'client_id': 'Ov23ctwnuNLg91zT6rvY',
-    #         'secret': 'd76d723f5f9799737274e742be396961105f2466',
-    #         'key': ''
-    #     }
-    # },
+# Load environment definition file
+ENV_FILE = find_dotenv()
+if ENV_FILE:
+    load_dotenv(ENV_FILE)
+
+# Load Auth0 application settings into memory
+AUTH0_DOMAIN = os.environ.get("AUTH0_DOMAIN")
+AUTH0_CLIENT_ID = os.environ.get("AUTH0_CLIENT_ID")
+AUTH0_CLIENT_SECRET = os.environ.get("AUTH0_CLIENT_SECRET")
+
+
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ALGORITHM': 'RS256',
+
+    'AUDIENCE': os.environ.get("AUTH0_AUDIENCE"),
+    'ISSUER': f"https://{os.environ.get('AUTH0_DOMAIN')}/.well-known/jwks.json",
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'USER_ID_FIELD': 'sub',
+    'USER_ID_CLAIM': 'sub',
 }
 
-OAUTH2_PROVIDER = {
-    'SCOPES': {
-        'read': 'Read scope',
-        'write': 'Write scope',
-        'groups': 'Access to your groups',
-    },
-    'DEFAULT_SCOPES': ['read', 'write'],
-    'AUTHORIZATION_CODE_EXPIRE_SECONDS': 600,  # 10 minutes
-    'ACCESS_TOKEN_EXPIRE_SECONDS': 3600,  # 1 hour
-}
-
-# Configure Django-Allauth Settings
-
-LOGIN_REDIRECT_URL = '/'  # Set your redirect URL after login
-ACCOUNT_LOGOUT_REDIRECT_URL = '/'  # Set your redirect URL after logout
-
-SOCIALACCOUNT_AUTO_SIGNUP = True  # Automatically create a user account
 
 
 # Internationalization
@@ -210,4 +185,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Media Settings
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 

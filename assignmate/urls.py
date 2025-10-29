@@ -18,15 +18,22 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from app import views
+from app import views as app_views
+from users import views as user_views
+from users import urls as user_urls
+from rest_framework import routers
 
-
+router = routers.DefaultRouter()
+router.register(r'users', user_views.UserViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('accounts/', include('allauth.urls')), #allauth urls for authentication and OAUth
-    path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),  # OAuth2 URLs
-    path('', views.home, name='home'),  # Home view
+
+    path('api/', include(router.urls)),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('', app_views.index, name='index'),  # Home view
+    path('', include(user_urls)),  # Include user app URLs
 ]
+
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
