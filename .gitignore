@@ -1,0 +1,19 @@
+# Ignore the venv folder
+/venv
+/env
+
+# Ignore the python bytecode files
+__pycache__/
+*.py[cod]
+*.pyo
+.pyc
+
+# Ignore other common unwanted files
+.DS_Store
+*.log
+*.sqlite3
+*.sqlite
+*.db
+
+# Ignoe environment files
+.env
