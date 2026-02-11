@@ -35,6 +35,8 @@ class Auth0Authentication(BaseAuthentication):
             print(payload)
             sub = payload.get("sub")
             email = payload.get("email")
+            permissions = payload.get("permissions", [])
+            print(f"User permissions: {permissions}")
 
             if not sub:
                 raise AuthenticationFailed("Token missing subject (sub) claim")
