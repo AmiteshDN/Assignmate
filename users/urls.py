@@ -1,10 +1,9 @@
-from django.urls import path, include
+from django.urls import path
 from . import views
 from app.views import index as app_index
-from rest_framework import routers
 
 urlpatterns = [
-    
+    path("api/register-role/", views.RegisterRoleView.as_view(), name="register_role"),
 ]
 
 urlpatterns += [path('', app_index, name='app_index')]
