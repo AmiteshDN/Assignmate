@@ -10,6 +10,7 @@ from django.urls import reverse
 from urllib.parse import urlencode
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
+from .permissions import HasUserPermissions
 from .serializers import UserSerializer
 from django.contrib.auth import get_user_model
 from .authentication import Auth0Authentication
@@ -27,7 +28,7 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     authentication_classes = [Auth0Authentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, HasUserPermissions]
 
 
 
