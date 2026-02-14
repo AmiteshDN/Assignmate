@@ -31,7 +31,7 @@ class RegisterRoleView(APIView):
 
     def post(self, request):
         role_name = (request.data.get("role") or "").strip().lower()
-        if role_name not in {"student", "teacher"}:
+        if role_name not in {"student", "tutor"}:
             return Response(
                 {"detail": "Role must be 'student' or 'teacher'."},
                 status=status.HTTP_400_BAD_REQUEST,
