@@ -19,4 +19,5 @@ class Auth0JWTBearerTokenValidator(JWTBearerTokenValidator):
             "iss": {"essential": True, "value": self.issuer},
             "aud": {"essential": True, "value": self.audience},
             "exp": {"essential": True},
+            # "permisions": {"essential": True, "value": "read:users"},
         }

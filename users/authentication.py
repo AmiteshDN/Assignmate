@@ -48,7 +48,10 @@ class Auth0Authentication(BaseAuthentication):
             )
             print(user)
 
-            return (user, token)
+            # Attach permissions for downstream permission checks
+            user.auth0_permissions = permissions
+
+            return (user, {"token": token, "permissions": permissions, "claims": payload})
 
         except Exception as e:
             raise AuthenticationFailed(f"Token validation failed: {e}")
