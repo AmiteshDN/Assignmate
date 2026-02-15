@@ -37,10 +37,10 @@ AssignMate is a role-based web platform built with Django that connects students
 | Layer         | Technology               |
 |---------------|---------------------------|
 | Backend       | Django, Django REST Framework |
-| Auth          | `django-allauth`, `dj-rest-auth`, OAuth2 |
-| OAuth Providers | Google, GitHub         |
+| Auth          | auth0|
+| OAuth Providers | NA      |
 | Database      | PostgreSQL               |
-| Frontend (Planned) | React / JS SPA     |
+| Frontend (Planned) | React / JS SPA (Planned)    |
 
 ---
 
@@ -67,7 +67,7 @@ assignmate/
 
 ## 🔐 OAuth Setup
 
-You’ve configured `django-allauth` for:
+You’ve configured `django-allauth` for: (Not needed for API executions)
 - Google login (with redirect URI: `http://localhost:8000/accounts/google/login/callback/`)
 - GitHub login (with redirect URI: `http://localhost:8000/accounts/github/login/callback/`)
 
